@@ -1,11 +1,21 @@
 package com.example.salilthip.mystoryapp;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -26,10 +36,10 @@ public class SignUpActivity extends AppCompatActivity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String getEmail = email.getText().toString();
-                String getPassword = password.getText().toString();
+                String getEmail = emailSignup.getText().toString();
+                String getPassword = passwordSignup.getText().toString();
                 if(getEmail.isEmpty()||getPassword.isEmpty())
-                    Toast.makeText(MainActivity.this, "Sign up Failed, please check your email and password",
+                    Toast.makeText(SignUpActivity.this, "Sign up Failed, please check your email and password",
                             Toast.LENGTH_SHORT).show();
                 else
                     callSignup(getEmail, getPassword);
@@ -54,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }else{
                             userProfile();
-                            Toast.makeText(MainActivity.this, "Account Created",
+                            Toast.makeText(SignUpActivity.this, "Account Created",
                                     Toast.LENGTH_SHORT).show();
                             Log.d("Test","Acoount Created");
                         }
@@ -62,6 +72,21 @@ public class SignUpActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    private void userProfile(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user!=null){
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName((emailSignup.getText().toString())).build();
+            user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        Log.d("test","user profile updates");
+                    }
+                }
+            });
+        }
     }
 
 

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "161099049867",
+    "firebase_url": "https://mystoryapp-2e9ec.firebaseio.com",
+    "project_id": "mystoryapp-2e9ec",
+    "storage_bucket": "mystoryapp-2e9ec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161099049867:android:fc252a238ad41f9e",
+        "android_client_info": {
+          "package_name": "com.example.salilthip.mystoryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161099049867-jrqatk0bsvh4tpdbm9mrv9r0ns99u4i8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.salilthip.mystoryapp",
+            "certificate_hash": "014a4608bab6364531965500ca26ccf592e2f756"
+          }
+        },
+        {
+          "client_id": "161099049867-498d2beov4h6q4pao7p7gko583bqq768.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd-A-QgEGzKCyj7roZBhMTMfICYQ2nFRI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161099049867-498d2beov4h6q4pao7p7gko583bqq768.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
