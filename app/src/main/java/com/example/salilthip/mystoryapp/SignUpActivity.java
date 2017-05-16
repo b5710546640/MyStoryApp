@@ -85,15 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e("Pass","email :"+getEmail);
                     Log.e("Pass","password :"+getPassword);
                     callSignup(getEmail, getPassword);
-
-//                    final String mName = emailSignup.getText().toString().trim();
-//                    if (mName.isEmpty()) {
-//                        Toast.makeText(getApplicationContext(), "Please Enter Title", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                    Firebase childRef_Name = mRootRef.child("profile_owner");
-//                    childRef_Name.setValue(mName);
-//                    Toast.makeText(getApplicationContext(), "Update Info", Toast.LENGTH_SHORT).show();
+                    finish();
 //                    askImageForSignUp();
                 }
             }
