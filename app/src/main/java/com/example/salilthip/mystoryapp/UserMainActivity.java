@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,6 +16,7 @@ public class UserMainActivity extends AppCompatActivity {
 
     private TextView emailProfile;
     private Button signout;
+    private ImageButton profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +27,19 @@ public class UserMainActivity extends AppCompatActivity {
 
         emailProfile = (TextView)findViewById(R.id.emailProfileTxt);
         signout = (Button)findViewById(R.id.signoutBtn);
+        profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
 
         if (mAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
         emailProfile.setText(mAuth.getCurrentUser().getEmail());
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

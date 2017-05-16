@@ -85,8 +85,9 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e("Pass","email :"+getEmail);
                     Log.e("Pass","password :"+getPassword);
                     callSignup(getEmail, getPassword);
-                    finish();
 //                    askImageForSignUp();
+                    finish();
+
                 }
             }
         });
