@@ -54,6 +54,12 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null) {
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+
         Firebase.setAndroidContext(this);
 
         emailSignup = (EditText)findViewById(R.id.emailSignup);
@@ -76,16 +82,19 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Sign up Failed, please check your email and password",
                             Toast.LENGTH_SHORT).show();
                 else {
+                    Log.e("Pass","email :"+getEmail);
+                    Log.e("Pass","password :"+getPassword);
                     callSignup(getEmail, getPassword);
-                    askImageForSignUp();
-                    final String mName = emailSignup.getText().toString().trim();
-                    if (mName.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Please Enter Title", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Firebase childRef_Name = mRootRef.child("profile_owner");
-                    childRef_Name.setValue(mName);
-                    Toast.makeText(getApplicationContext(), "Update Info", Toast.LENGTH_SHORT).show();
+
+//                    final String mName = emailSignup.getText().toString().trim();
+//                    if (mName.isEmpty()) {
+//                        Toast.makeText(getApplicationContext(), "Please Enter Title", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    Firebase childRef_Name = mRootRef.child("profile_owner");
+//                    childRef_Name.setValue(mName);
+//                    Toast.makeText(getApplicationContext(), "Update Info", Toast.LENGTH_SHORT).show();
+//                    askImageForSignUp();
                 }
             }
         });
@@ -110,6 +119,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void callSignup(String email, String password) {
+        Log.e("callsignup","email :"+email);
+        Log.e("callsugnup","password :"+password);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -132,6 +143,7 @@ public class SignUpActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+
     }
 
     @Override
@@ -149,11 +161,12 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("DataonActivityResult", "check data :"+data+"request code : "+requestCode);
         if(requestCode==GALLERY_INTENT && resultCode==RESULT_OK){
             mImageUri = data.getData();
+            Log.d("mimageUri", "check :"+mImageUri.toString());
             selectedImage.setImageURI(mImageUri);
             StorageReference filepath = mStorage.child("User_Images").child(mImageUri.getLastPathSegment());
-
             mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
 
@@ -161,6 +174,7 @@ public class SignUpActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    Log.d("Success", "putFile:onSuccess");
                     mRootRef.child("Image_URL").setValue(downloadUri.toString());
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
@@ -172,6 +186,7 @@ public class SignUpActivity extends AppCompatActivity {
                     mProgressDialog.dismiss();
                 }
             });
+            Log.d("Case out", "after putfile success"+mImageUri.toString());
         }
     }
 
