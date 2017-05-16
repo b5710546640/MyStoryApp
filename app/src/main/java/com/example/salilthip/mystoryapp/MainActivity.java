@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText email,password;
     private Button loginBtn;
+    private ImageButton profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
         email = (EditText)findViewById(R.id.emailEdt);
         password = (EditText)findViewById(R.id.passwordEdt);
         loginBtn = (Button)findViewById(R.id.loginBtn);
+        profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
 
         if (mAuth.getCurrentUser() != null) {
             email.setText(mAuth.getCurrentUser().getEmail());
+            profileImage.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
         }
 
 
