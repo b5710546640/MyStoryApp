@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "161099049867-6ro42i9856u6o7dhe06qn5cg45pbsn62.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.salilthip.mystoryapp",
+            "certificate_hash": "08c3b9daf0320b023a7af7657d1a0e07b243f33e"
+          }
+        },
+        {
           "client_id": "161099049867-jrqatk0bsvh4tpdbm9mrv9r0ns99u4i8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
