@@ -65,20 +65,25 @@ public class UserMainActivity extends AppCompatActivity {
         updateProfile = (Button)findViewById(R.id.updateBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
         displayname = (EditText)findViewById(R.id.displayNameTxt);
-
-        displayname.setText(mAuth.getCurrentUser().getDisplayName().toString());
+        Log.e("Test","UserMainAct");
 
         mProgressDialog = new ProgressDialog(UserMainActivity.this);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
-
+        Log.e("test","Before check mAuth");
         if (mAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
-        profileImage.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
-        emailProfile.setText(mAuth.getCurrentUser().getEmail());
+
+        String email = mAuth.getCurrentUser().getEmail();
+        String nameDisplay = mAuth.getCurrentUser().getDisplayName();
+        Uri imageUri = mAuth.getCurrentUser().getPhotoUrl();
+        if (imageUri!=null) profileImage.setImageURI(imageUri);
+        emailProfile.setText(email);
+        if (nameDisplay!=null)  displayname.setText(nameDisplay);
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

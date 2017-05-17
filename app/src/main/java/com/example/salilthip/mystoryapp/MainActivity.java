@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         }else {
                             Intent i = new Intent(MainActivity.this, UserMainActivity.class);
                             finish();
+                            Log.e("Login","Successful");
                             startActivity(i);
                         }
                         // ...
