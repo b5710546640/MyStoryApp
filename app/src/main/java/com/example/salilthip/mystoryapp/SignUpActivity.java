@@ -69,9 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(SignUpActivity.this);
 
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mRootRef = new Firebase("https://mystoryapp-2e9ec.firebaseio.com/").child("User_Details").push();
-        mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
+
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
