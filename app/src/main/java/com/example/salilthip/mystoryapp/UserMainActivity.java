@@ -70,6 +70,7 @@ public class UserMainActivity extends AppCompatActivity {
         updateProfile = (Button)findViewById(R.id.updateBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
         displayname = (EditText)findViewById(R.id.displayNameTxt);
+
         Log.e("Test","UserMainAct");
 
 //        navEmail = (TextView)findViewById(R.id.emailNav);
