@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,10 @@ public class UserMainActivity extends AppCompatActivity {
     private Button signout,updateProfile;
     private ImageButton profileImage;
 
+    //Navigation
+    private ImageView navImage;
+    private TextView navName,navEmail;
+
     private ProgressDialog mProgressDialog;
     private Firebase mRootRef;
     private DatabaseReference mDatabaseRef;
@@ -67,6 +72,10 @@ public class UserMainActivity extends AppCompatActivity {
         displayname = (EditText)findViewById(R.id.displayNameTxt);
         Log.e("Test","UserMainAct");
 
+        navEmail = (TextView)findViewById(R.id.emailNav);
+        navImage = (ImageView)findViewById(R.id.imageProfileNav);
+        navName = (TextView)findViewById(R.id.displayNameNav);
+
         mProgressDialog = new ProgressDialog(UserMainActivity.this);
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
@@ -80,9 +89,20 @@ public class UserMainActivity extends AppCompatActivity {
         String email = mAuth.getCurrentUser().getEmail();
         String nameDisplay = mAuth.getCurrentUser().getDisplayName();
         Uri imageUri = mAuth.getCurrentUser().getPhotoUrl();
-        if (imageUri!=null) profileImage.setImageURI(imageUri);
+        Log.e("TEST","1"+email);
+        Log.e("TEST","2"+nameDisplay);
+        Log.e("TEST","3"+imageUri);
+        //Display profile
+        if (imageUri!=null){
+            profileImage.setImageURI(imageUri);
+            navImage.setImageURI(imageUri);
+        }
         emailProfile.setText(email);
-        if (nameDisplay!=null)  displayname.setText(nameDisplay);
+        navEmail.setText(email);
+        if (nameDisplay!=null){
+            displayname.setText(nameDisplay);
+            navName.setText(nameDisplay);
+        }
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
