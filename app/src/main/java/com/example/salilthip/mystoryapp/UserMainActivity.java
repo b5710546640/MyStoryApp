@@ -2,14 +2,18 @@ package com.example.salilthip.mystoryapp;
 
 import android.*;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.Firebase;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +44,9 @@ import static com.example.salilthip.mystoryapp.SignUpActivity.READ_EXTERNAL_STOR
 public class UserMainActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
+    RecyclerView recyclerView;
+
+    private FirebaseRecyclerAdapter<ViewSingleStory,ShowDataViewHolder> mFirebaseAdapter;
 
     private static final int GALLERY_INTENT = 2;
     private Uri mImageUri = null;
@@ -70,6 +78,10 @@ public class UserMainActivity extends AppCompatActivity {
         updateProfile = (Button)findViewById(R.id.updateBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
         displayname = (EditText)findViewById(R.id.displayNameTxt);
+
+        recyclerView = (RecyclerView)findViewById(R.id.storyListView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(UserMainActivity.this));
+
 
         Log.e("Test","UserMainAct");
 
@@ -124,6 +136,44 @@ public class UserMainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<ViewSingleStory, ShowDataViewHolder>(ViewSingleStory.class,R.layout.view_single_story,ShowDataViewHolder.class,mDatabaseRef) {
+            @Override
+            protected void populateViewHolder(final ShowDataViewHolder viewHolder, ViewSingleStory model, final int position) {
+                viewHolder.Story_Title(model.getTitle());
+                viewHolder.Story_Detail(model.getDetail());
+
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(UserMainActivity.this);
+                        builder.setMessage("View").setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int selectedItems = position;
+                                        //////////Show the story
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.setTitle("Are you sure?");
+                        dialog.show();
+                    }
+                });
+
+            }
+        };
+        recyclerView.setAdapter(mFirebaseAdapter);
     }
 
     private void askForImage(){
@@ -219,5 +269,24 @@ public class UserMainActivity extends AppCompatActivity {
         Intent i = new Intent(UserMainActivity.this, MainActivity.class);
         finish();
         startActivity(i);
+    }
+
+    public static class ShowDataViewHolder extends RecyclerView.ViewHolder{
+        private final TextView story_title;
+        private final TextView story_detail;
+
+        public ShowDataViewHolder(final View itemView){
+            super(itemView);
+            story_title = (TextView)itemView.findViewById(R.id.story_title);
+            story_detail = (TextView)itemView.findViewById(R.id.story_intro);
+        }
+
+        private void Story_Title(String title){
+            story_title.setText(title);
+        }
+
+        private  void Story_Detail(String detail){
+            story_title.setText(detail);
+        }
     }
 }
