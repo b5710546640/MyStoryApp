@@ -69,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(SignUpActivity.this);
 
+        Log.e("Access","Into Signin Activity");
 
 
         signupBtn.setOnClickListener(new View.OnClickListener() {

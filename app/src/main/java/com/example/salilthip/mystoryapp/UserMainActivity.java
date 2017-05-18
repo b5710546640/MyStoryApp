@@ -47,9 +47,9 @@ public class UserMainActivity extends AppCompatActivity {
     private Button signout,updateProfile;
     private ImageButton profileImage;
 
-    //Navigation
-    private ImageView navImage;
-    private TextView navName,navEmail;
+//    //Navigation
+//    private ImageView navImage;
+//    private TextView navName,navEmail;
 
     private ProgressDialog mProgressDialog;
     private Firebase mRootRef;
@@ -72,9 +72,9 @@ public class UserMainActivity extends AppCompatActivity {
         displayname = (EditText)findViewById(R.id.displayNameTxt);
         Log.e("Test","UserMainAct");
 
-        navEmail = (TextView)findViewById(R.id.emailNav);
-        navImage = (ImageView)findViewById(R.id.imageProfileNav);
-        navName = (TextView)findViewById(R.id.displayNameNav);
+//        navEmail = (TextView)findViewById(R.id.emailNav);
+//        navImage = (ImageView)findViewById(R.id.imageProfileNav);
+//        navName = (TextView)findViewById(R.id.displayNameNav);
 
         mProgressDialog = new ProgressDialog(UserMainActivity.this);
 
@@ -95,13 +95,13 @@ public class UserMainActivity extends AppCompatActivity {
         //Display profile
         if (imageUri!=null){
             profileImage.setImageURI(imageUri);
-            navImage.setImageURI(imageUri);
+//            navImage.setImageURI(imageUri);
         }
         emailProfile.setText(email);
-        navEmail.setText(email);
+//        navEmail.setText(email);
         if (nameDisplay!=null){
             displayname.setText(nameDisplay);
-            navName.setText(nameDisplay);
+//            navName.setText(nameDisplay);
         }
 
         profileImage.setOnClickListener(new View.OnClickListener() {

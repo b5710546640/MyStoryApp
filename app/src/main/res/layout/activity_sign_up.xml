@@ -43,7 +43,7 @@
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Email Address"
+                android:hint="Email Address ABD"
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:textAlignment="center" />

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (mAuth.getCurrentUser() != null) {
             email.setText(mAuth.getCurrentUser().getEmail());
+            if(mAuth.getCurrentUser().getPhotoUrl()!=null)
             profileImage.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
         }
 
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
                         startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
                     }
                 })
