@@ -2,24 +2,32 @@ package com.example.salilthip.mystoryapp;
 
 import android.*;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +49,12 @@ import com.google.firebase.storage.UploadTask;
 
 import static com.example.salilthip.mystoryapp.SignUpActivity.READ_EXTERNAL_STORAGE;
 
-public class UserMainActivity extends AppCompatActivity {
+public class UserMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     FirebaseAuth mAuth;
     RecyclerView recyclerView;
+
+    private View navProfile,navStory,navSignOut;
 
     private FirebaseRecyclerAdapter<ViewSingleStory,ShowDataViewHolder> mFirebaseAdapter;
 
@@ -52,7 +62,7 @@ public class UserMainActivity extends AppCompatActivity {
     private Uri mImageUri = null;
     private TextView emailProfile;
     private EditText displayname;
-    private Button signout,updateProfile;
+    private Button updateProfile;
     private ImageButton profileImage;
 
 //    //Navigation
@@ -74,13 +84,16 @@ public class UserMainActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         emailProfile = (TextView)findViewById(R.id.emailProfileTxt);
-        signout = (Button)findViewById(R.id.signoutBtn);
         updateProfile = (Button)findViewById(R.id.updateBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
         displayname = (EditText)findViewById(R.id.displayNameTxt);
 
-        recyclerView = (RecyclerView)findViewById(R.id.storyListView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(UserMainActivity.this));
+//        recyclerView = (RecyclerView)findViewById(R.id.storyListView);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(UserMainActivity.this));
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
 
 
         Log.e("Test","UserMainAct");
@@ -129,52 +142,46 @@ public class UserMainActivity extends AppCompatActivity {
                 userUpdateProfile(displayname.getText().toString(),mImageUri.toString());
             }
         });
-        signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callSignout();
-            }
-        });
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<ViewSingleStory, ShowDataViewHolder>(ViewSingleStory.class,R.layout.view_single_story,ShowDataViewHolder.class,mDatabaseRef) {
-            @Override
-            protected void populateViewHolder(final ShowDataViewHolder viewHolder, ViewSingleStory model, final int position) {
-                viewHolder.Story_Title(model.getTitle());
-                viewHolder.Story_Detail(model.getDetail());
-
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(UserMainActivity.this);
-                        builder.setMessage("View").setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int selectedItems = position;
-                                        //////////Show the story
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        dialog.setTitle("Are you sure?");
-                        dialog.show();
-                    }
-                });
-
-            }
-        };
-        recyclerView.setAdapter(mFirebaseAdapter);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        mFirebaseAdapter = new FirebaseRecyclerAdapter<ViewSingleStory, ShowDataViewHolder>(ViewSingleStory.class,R.layout.view_single_story,ShowDataViewHolder.class,mDatabaseRef) {
+//            @Override
+//            protected void populateViewHolder(final ShowDataViewHolder viewHolder, ViewSingleStory model, final int position) {
+//                viewHolder.Story_Title(model.getTitle());
+//                viewHolder.Story_Detail(model.getDetail());
+//
+//                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(UserMainActivity.this);
+//                        builder.setMessage("View").setCancelable(false)
+//                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        int selectedItems = position;
+//                                        //////////Show the story
+//                                    }
+//                                })
+//                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//                        AlertDialog dialog = builder.create();
+//                        dialog.setTitle("Are you sure?");
+//                        dialog.show();
+//                    }
+//                });
+//
+//            }
+//        };
+//        recyclerView.setAdapter(mFirebaseAdapter);
+//    }
 
     private void askForImage(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -269,6 +276,37 @@ public class UserMainActivity extends AppCompatActivity {
         Intent i = new Intent(UserMainActivity.this, MainActivity.class);
         finish();
         startActivity(i);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_profile) {
+
+            LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_container);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.content_sign_in, null);
+            mainLayout.removeAllViews();
+            mainLayout.addView(layout);
+
+        } else if (id == R.id.nav_story) {
+
+            LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_container);
+            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.content_story_list, null);
+            mainLayout.removeAllViews();
+            mainLayout.addView(layout);
+
+        } else if (id == R.id.nav_signout) {
+            callSignout();
+            Log.e("Success","Call Signout");
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public static class ShowDataViewHolder extends RecyclerView.ViewHolder{

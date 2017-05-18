@@ -7,11 +7,8 @@
     tools:context="com.example.salilthip.mystoryapp.UserMainActivity">
 
     <include
-        android:id="@+id/show_content_profile"
+        android:id="@+id/main_container"
         layout="@layout/content_sign_in" />
-    <include
-        android:id="@+id/show_content_story"
-        layout="@layout/content_story_list"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
