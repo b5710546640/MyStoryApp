@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".UserMainActivity" />
+        <activity android:name=".NewStoryActivity"></activity>
     </application>
 
 </manifest>

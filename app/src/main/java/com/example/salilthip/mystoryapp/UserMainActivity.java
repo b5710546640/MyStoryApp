@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -54,7 +55,10 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
     FirebaseAuth mAuth;
     RecyclerView recyclerView;
 
+
     private View navProfile,navStory,navSignOut;
+
+    FloatingActionButton newStory;
 
     private FirebaseRecyclerAdapter<ViewSingleStory,ShowDataViewHolder> mFirebaseAdapter;
 
@@ -87,6 +91,8 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         updateProfile = (Button)findViewById(R.id.updateBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
         displayname = (EditText)findViewById(R.id.displayNameTxt);
+
+        newStory = (FloatingActionButton)findViewById(R.id.new_story);
 
 //        recyclerView = (RecyclerView)findViewById(R.id.storyListView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(UserMainActivity.this));
@@ -130,6 +136,14 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
 //            navName.setText(nameDisplay);
         }
 
+        newStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("Success","Add new story");
+                startActivity(new Intent(getApplicationContext(), NewStoryActivity.class));
+            }
+        });
+
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +158,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
         });
 
     }
+
 
 //    @Override
 //    protected void onStart() {
