@@ -64,9 +64,9 @@ public class SignUpActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
 
-        Firebase.setAndroidContext(this);
+
+        mRootRef = new Firebase("gs://mystoryapp-2e9ec.appspot.com/").child("User_Details").push();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mRootRef = new Firebase("https://mystoryapp-2e9ec.firebaseio.com/").child("User_Details").push();
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
 
 
@@ -127,8 +127,8 @@ public class SignUpActivity extends AppCompatActivity {
     public void uploadImageToDatabase(String uri){
         Log.e("INN","Upload Image");
 
-        FirebaseDatabase.getInstance().getReference("User_Images").child(mAuth.getCurrentUser().getUid()+"")
-                .child("image_url").setValue(uri);
+        mDatabaseRef.child("User_ID").setValue(mAuth.getCurrentUser().getUid()+"");
+        mDatabaseRef.child("image_url").setValue(uri);
 
 
         if (mAuth!=null) {
@@ -182,44 +182,46 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("DataonActivityResult", "check data :"+data+"request code : "+requestCode);
+
         if(requestCode==GALLERY_INTENT && resultCode==RESULT_OK){
             mImageUri = data.getData();
-            Log.d("mimageUri", "check :"+mImageUri.toString());
             selectedImage.setImageURI(mImageUri);
             StorageReference filepath = mStorage.child("User_Images").child(mImageUri.getLastPathSegment());
+
             mProgressDialog.setMessage("Uploading...");
             mProgressDialog.show();
+            Log.e("Test","Filepath :"+filepath.toString());
+//            Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+//            StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+            UploadTask uploadTask = filepath.putFile(mImageUri);
+            Log.e("Test","Filepath2 :"+uploadTask.isInProgress());
 
-            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
+                    mProgressDialog.dismiss();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
-                    Log.d("Success", "putFile:onSuccess");
-//                    storageUri = downloadUri.toString();
-                    mRootRef.child("Image_URL").setValue(downloadUri.toString());
-                    Log.e("Until","Here");
+                    mDatabaseRef.child("Image_URL").setValue(downloadUri.toString());
+                    Log.e("Test","OnSuccess");
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
                             .crossFade()
                             .placeholder(R.drawable.loading)
                             .diskCacheStrategy(DiskCacheStrategy.RESULT)
                             .into(selectedImage);
-                    Log.e("Test","Success in putfile");
                     Toast.makeText(getApplicationContext(),"Updated...",Toast.LENGTH_SHORT).show();
-                    Log.e("Test2","Success");
-                    mProgressDialog.dismiss();
-                    Log.e("Test3","Success");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
                     mProgressDialog.dismiss();
                 }
             });
-            Log.d("Case out", "after putfile success"+mImageUri.toString());
         }
+
     }
 
     private void userProfile(){
