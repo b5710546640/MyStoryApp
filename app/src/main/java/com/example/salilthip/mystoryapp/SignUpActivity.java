@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -45,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private Firebase mRootRef;
     private Uri mImageUri = null;
+    private String storageUri = "";
     private DatabaseReference mDatabaseRef;
     private StorageReference mStorage;
 
@@ -53,7 +55,9 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        Firebase.setAndroidContext(this);
         mAuth = FirebaseAuth.getInstance();
+
 
         if (mAuth.getCurrentUser() != null) {
             finish();
@@ -61,6 +65,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         Firebase.setAndroidContext(this);
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        mRootRef = new Firebase("https://mystoryapp-2e9ec.firebaseio.com/").child("User_Details").push();
+        mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
+
 
         emailSignup = (EditText)findViewById(R.id.emailSignup);
         passwordSignup = (EditText)findViewById(R.id.passwordSignup);
@@ -71,6 +79,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         Log.e("Access","Into Signin Activity");
 
+        selectedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askImageForSignUp();
+            }
+        });
 
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e("Pass","email :"+getEmail);
                     Log.e("Pass","password :"+getPassword);
                     callSignup(getEmail, getPassword);
-//                    askImageForSignUp();
+                    if (storageUri!=null) uploadImageToDatabase(storageUri);
                     finish();
 
                 }
@@ -108,6 +122,21 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, GALLERY_INTENT);
+    }
+
+    public void uploadImageToDatabase(String uri){
+        Log.e("INN","Upload Image");
+
+        FirebaseDatabase.getInstance().getReference("User_Images").child(mAuth.getCurrentUser().getUid()+"")
+                .child("image_url").setValue(uri);
+
+
+        if (mAuth!=null) {
+            Toast.makeText(getApplicationContext(), "Please Sign In", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(getApplicationContext(), "Update Info", Toast.LENGTH_SHORT).show();
     }
 
     private void callSignup(String email, String password) {
@@ -167,14 +196,25 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
                     Log.d("Success", "putFile:onSuccess");
+//                    storageUri = downloadUri.toString();
                     mRootRef.child("Image_URL").setValue(downloadUri.toString());
+                    Log.e("Until","Here");
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
                             .crossFade()
                             .placeholder(R.drawable.loading)
                             .diskCacheStrategy(DiskCacheStrategy.RESULT)
                             .into(selectedImage);
+                    Log.e("Test","Success in putfile");
                     Toast.makeText(getApplicationContext(),"Updated...",Toast.LENGTH_SHORT).show();
+                    Log.e("Test2","Success");
+                    mProgressDialog.dismiss();
+                    Log.e("Test3","Success");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(),"Failure",Toast.LENGTH_SHORT).show();
                     mProgressDialog.dismiss();
                 }
             });

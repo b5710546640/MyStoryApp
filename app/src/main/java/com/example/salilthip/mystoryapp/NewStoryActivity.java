@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.salilthip.mystoryapp.R;
+
 public class NewStoryActivity extends AppCompatActivity {
 
     private FloatingActionButton saveStory;
@@ -19,7 +21,7 @@ public class NewStoryActivity extends AppCompatActivity {
         saveStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
     }
