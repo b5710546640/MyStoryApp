@@ -55,7 +55,8 @@ public class ViewAllStory extends AppCompatActivity {
                                         intent.putExtra("selectedPost",mFirebaseAdapter.getRef(selectedItems).getKey()+"");
                                         startActivity(intent);
                                         Log.e("Test","Position"+selectedItems);
-                                        RecyclerView.ViewHolder story = recyclerView.getRecycledViewPool().getRecycledView(position);
+                                        finish();
+//                                        RecyclerView.ViewHolder story = recyclerView.getRecycledViewPool().getRecycledView(position);
                                         //////////Show the story
                                     }
                                 })

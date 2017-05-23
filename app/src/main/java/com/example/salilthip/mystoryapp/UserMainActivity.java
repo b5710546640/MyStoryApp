@@ -264,7 +264,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
             mainLayout.addView(layout);
 
         } else if (id == R.id.nav_story) {
-
+            finish();
             startActivity(new Intent(getApplicationContext(), ViewAllStory.class));
 //            LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_container);
 //            LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
