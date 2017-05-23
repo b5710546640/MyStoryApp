@@ -98,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Log.e("Pass","email :"+getEmail);
                     Log.e("Pass","password :"+getPassword);
                     callSignup(getEmail, getPassword);
-                    if (storageUri!=null) uploadImageToDatabase(storageUri);
+
                     finish();
 
                 }
@@ -127,7 +127,9 @@ public class SignUpActivity extends AppCompatActivity {
     public void uploadImageToDatabase(String uri){
         Log.e("INN","Upload Image");
 
-        mDatabaseRef.child("User_ID").setValue(mAuth.getCurrentUser().getUid()+"");
+
+        String uidStr = mAuth.getCurrentUser().getUid()+"";
+        mDatabaseRef.child("User_ID").setValue(uidStr);
         mDatabaseRef.child("image_url").setValue(uri);
 
 
