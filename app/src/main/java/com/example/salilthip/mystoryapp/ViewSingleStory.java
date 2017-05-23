@@ -6,7 +6,7 @@ package com.example.salilthip.mystoryapp;
 
 public class ViewSingleStory {
 
-    private String title,detail;
+    protected String title,detail;
 
     public ViewSingleStory(String title,String detail){
         this.title=title;

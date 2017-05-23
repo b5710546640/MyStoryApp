@@ -1,11 +1,13 @@
 package com.example.salilthip.mystoryapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,13 +44,18 @@ public class ViewAllStory extends AppCompatActivity {
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(final View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(ViewAllStory.this);
                         builder.setMessage("View").setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         int selectedItems = position;
+                                        Intent intent = new Intent(ViewAllStory.this, ViewStoryActivity.class);
+                                        intent.putExtra("selectedPost",mFirebaseAdapter.getRef(selectedItems).getKey()+"");
+                                        startActivity(intent);
+                                        Log.e("Test","Position"+selectedItems);
+                                        RecyclerView.ViewHolder story = recyclerView.getRecycledViewPool().getRecycledView(position);
                                         //////////Show the story
                                     }
                                 })
