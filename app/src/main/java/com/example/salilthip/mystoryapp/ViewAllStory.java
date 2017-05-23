@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -22,14 +25,32 @@ public class ViewAllStory extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     private FirebaseRecyclerAdapter<ViewSingleStory,ShowDataViewHolder> mFirebaseAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all_story);
         Firebase.setAndroidContext(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+            toolbar.setNavigationIcon(R.drawable.arrow_back_m);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), UserMainActivity.class));
+                }
+            });
+
+
         recyclerView = (RecyclerView)findViewById(R.id.storyListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(ViewAllStory.this));
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("User_post");
+
+
+
 
     }
 

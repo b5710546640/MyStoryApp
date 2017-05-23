@@ -28,7 +28,8 @@
         <activity android:name=".UserMainActivity" />
         <activity android:name=".NewStoryActivity" />
         <activity android:name=".ViewAllStory" />
-        <activity android:name=".ViewStoryActivity"></activity>
+        <activity android:name=".ViewStoryActivity" />
+        <activity android:name=".AcheiveStoryActivity"></activity>
     </application>
 
 </manifest>
