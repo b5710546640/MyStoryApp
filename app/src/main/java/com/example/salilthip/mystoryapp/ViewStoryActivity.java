@@ -84,9 +84,9 @@ public class ViewStoryActivity extends AppCompatActivity {
                         ref.child(refPost).child("title").setValue(titleEdt.getText()+"");
                         ref.child(refPost).child("detail").setValue(detailEdt.getText()+"");
                         ref.child(refPost).child("writer").setValue(mAuth.getCurrentUser().getUid()+"");
-                        ref.child(refPost).child("Timestamp").setValue(ServerValue.TIMESTAMP+"");
+                        ref.child(refPost).child("Timestamp").setValue(ServerValue.TIMESTAMP);
                 finish();
-                startActivity(new Intent(getApplicationContext(), UserMainActivity.class));
+                startActivity(new Intent(getApplicationContext(), ViewAllStory.class));
 //                        toggleEditable();
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
