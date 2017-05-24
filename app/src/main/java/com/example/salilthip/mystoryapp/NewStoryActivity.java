@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -76,7 +77,9 @@ public class NewStoryActivity extends AppCompatActivity {
                 post_ref.child("detail").setValue(mDetail);
                 post_ref.child("Timestamp").setValue(ServerValue.TIMESTAMP);
                 post_ref.child("writer").setValue(mAuth.getCurrentUser().getUid());
+                Intent i = new Intent(NewStoryActivity.this, ViewAllStory.class);
                 finish();
+                startActivity(i);
 
             }
         });

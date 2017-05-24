@@ -2,6 +2,7 @@ package com.example.salilthip.mystoryapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -19,12 +23,17 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 public class ViewAllStory extends AppCompatActivity {
 
     RecyclerView recyclerView;
     private DatabaseReference mDatabaseRef;
     private FirebaseRecyclerAdapter<ViewSingleStory,ShowDataViewHolder> mFirebaseAdapter;
+    LinearLayoutManager mLayoutManager;
 
+    private Button newStory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,7 @@ public class ViewAllStory extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        newStory = (Button)findViewById(R.id.newStoryBtn);
         setSupportActionBar(toolbar);
 
             toolbar.setNavigationIcon(R.drawable.arrow_back_m);
@@ -46,12 +56,51 @@ public class ViewAllStory extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView)findViewById(R.id.storyListView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ViewAllStory.this));
+        mLayoutManager = new LinearLayoutManager(ViewAllStory.this);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(mLayoutManager);
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("User_post");
 
 
 
+        newStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("Success","Add new story");
+                startActivity(new Intent(getApplicationContext(), NewStoryActivity.class));
+            }
+        });
 
+
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_sort) {
+            mLayoutManager.setReverseLayout(!mLayoutManager.getReverseLayout());
+            mLayoutManager.setStackFromEnd(!mLayoutManager.getStackFromEnd());
+            recyclerView.setLayoutManager(mLayoutManager);
+            onStart();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -100,6 +149,7 @@ public class ViewAllStory extends AppCompatActivity {
 
             }
         };
+
         recyclerView.setAdapter(mFirebaseAdapter);
     }
 
@@ -122,6 +172,8 @@ public class ViewAllStory extends AppCompatActivity {
             story_detail.setText(detail);
         }
     }
+
+
 
 
 }

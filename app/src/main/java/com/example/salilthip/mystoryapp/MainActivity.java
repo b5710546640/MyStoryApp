@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             alertInvalidAccount();
                         }else {
-                            Intent i = new Intent(MainActivity.this, UserMainActivity.class);
+                            Intent i = new Intent(MainActivity.this, ViewAllStory.class);
                             finish();
                             Log.e("Login","Successful");
                             startActivity(i);

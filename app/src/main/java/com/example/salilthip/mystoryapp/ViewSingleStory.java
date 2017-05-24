@@ -7,8 +7,17 @@ package com.example.salilthip.mystoryapp;
 public class ViewSingleStory {
 
     protected String title,detail;
+    protected String uid;
 
-    public ViewSingleStory(String title,String detail){
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public ViewSingleStory(String title, String detail){
         this.title=title;
         this.detail=detail;
     }
