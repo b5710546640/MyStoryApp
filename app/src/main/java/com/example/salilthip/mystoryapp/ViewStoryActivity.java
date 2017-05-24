@@ -1,11 +1,13 @@
 package com.example.salilthip.mystoryapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.firebase.client.Firebase;
@@ -26,6 +28,7 @@ public class ViewStoryActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     String refPost;
     FirebaseAuth mAuth;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class ViewStoryActivity extends AppCompatActivity {
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         mDatabaseRef.child("User_post").child(message).addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -79,6 +83,7 @@ public class ViewStoryActivity extends AppCompatActivity {
 //                toggleEditable();
 //                if (titleEdt!=null&&detailEdt!=null)
 //                    try {
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 DatabaseReference ref = mDatabaseRef.child("User_post");
                 Log.e("Test", ref.child(refPost).child("title")+"");
                         ref.child(refPost).child("title").setValue(titleEdt.getText()+"");

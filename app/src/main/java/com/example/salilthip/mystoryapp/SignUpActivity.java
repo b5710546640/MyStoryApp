@@ -2,6 +2,7 @@ package com.example.salilthip.mystoryapp;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,7 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String storageUri = "";
     private DatabaseReference mDatabaseRef;
     private StorageReference mStorage;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
 
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         emailSignup = (EditText)findViewById(R.id.emailSignup);
         passwordSignup = (EditText)findViewById(R.id.passwordSignup);
@@ -76,6 +81,32 @@ public class SignUpActivity extends AppCompatActivity {
         selectedImage = (ImageButton)findViewById(R.id.selectImageBtn);
 
         mProgressDialog = new ProgressDialog(SignUpActivity.this);
+
+        passwordSignup.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    // Perform action on key press
+                    String getEmail = emailSignup.getText().toString();
+                    String getPassword = passwordSignup.getText().toString();
+                    if(getEmail.isEmpty()||getPassword.isEmpty())
+                        Toast.makeText(SignUpActivity.this, "Sign up Failed, please check your email and password",
+                                Toast.LENGTH_SHORT).show();
+                    else {
+                        Log.e("Pass","email :"+getEmail);
+                        Log.e("Pass","password :"+getPassword);
+                        callSignup(getEmail, getPassword);
+
+                        finish();
+
+                    }
+                }
+                return false;
+            }
+        });
 
         Log.e("Access","Into Signin Activity");
 
@@ -89,6 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 String getEmail = emailSignup.getText().toString();
                 String getPassword = passwordSignup.getText().toString();
                 if(getEmail.isEmpty()||getPassword.isEmpty())

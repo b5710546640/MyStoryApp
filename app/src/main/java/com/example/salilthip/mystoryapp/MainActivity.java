@@ -1,5 +1,6 @@
 package com.example.salilthip.mystoryapp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -7,10 +8,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText email,password;
     private Button loginBtn;
     private ImageButton profileImage;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +43,40 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = (Button)findViewById(R.id.loginBtn);
         profileImage = (ImageButton)findViewById(R.id.profileImageBtn);
 
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
         if (mAuth.getCurrentUser() != null) {
             email.setText(mAuth.getCurrentUser().getEmail());
             if(mAuth.getCurrentUser().getPhotoUrl()!=null)
             profileImage.setImageURI(mAuth.getCurrentUser().getPhotoUrl());
         }
 
+        password.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    // Perform action on key press
+                    String getEmail = email.getText().toString();
+                    String getPassword = password.getText().toString();
+                    if(getEmail.isEmpty()||getPassword.isEmpty())
+                        Toast.makeText(MainActivity.this, "Sign in Failed, please check your email and password",
+                                Toast.LENGTH_SHORT).show();
+                    else
+                        callSignin(getEmail, getPassword);
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 String getEmail = email.getText().toString();
                 String getPassword = password.getText().toString();
                 if(getEmail.isEmpty()||getPassword.isEmpty())

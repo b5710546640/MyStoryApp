@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -72,6 +73,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
     private Firebase mRootRef;
     private DatabaseReference mDatabaseRef;
     private StorageReference mStorage;
+    public InputMethodManager imm;
 
 
     @Override
@@ -89,7 +91,7 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
 
         newStory = (FloatingActionButton)findViewById(R.id.new_story);
 
-
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -145,8 +147,10 @@ public class UserMainActivity extends AppCompatActivity implements NavigationVie
             }
         });
         updateProfile.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 userUpdateProfile(displayname.getText().toString(),mImageUri.toString());
             }
         });
