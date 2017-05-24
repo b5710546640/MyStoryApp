@@ -1,10 +1,12 @@
 package com.example.salilthip.mystoryapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -45,6 +47,18 @@ public class NewStoryActivity extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mystoryapp-2e9ec.appspot.com/");
 
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.arrow_back_m);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), UserMainActivity.class));
+            }
+        });
 
         saveStory.setOnClickListener(new View.OnClickListener() {
             public InputMethodManager imm;

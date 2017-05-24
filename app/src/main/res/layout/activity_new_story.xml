@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.salilthip.mystoryapp.NewStoryActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <RelativeLayout
+        android:layout_below="@id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <EditText
             android:id="@+id/title_input"
             android:layout_width="match_parent"
@@ -24,20 +36,23 @@
             android:inputType="textMultiLine" />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/saveStory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        app:srcCompat="@android:drawable/ic_menu_save"
-        tools:layout_editor_absoluteX="328dp"
-        tools:layout_editor_absoluteY="511dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/saveStory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            tools:layout_editor_absoluteX="328dp"
+            tools:layout_editor_absoluteY="511dp" />
+    </RelativeLayout>
+
+
 
 
 </RelativeLayout>
