@@ -51,7 +51,7 @@ public class NewStoryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+//                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 String mTitle = title.getText().toString();
                 String mDetail = detail.getText().toString();
                 if (mTitle.isEmpty() && mDetail.isEmpty()){

@@ -67,8 +67,21 @@ public class ViewAllStory extends AppCompatActivity {
                     @Override
                     public void onClick(final View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(ViewAllStory.this);
-                        builder.setMessage("View").setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        builder.setMessage("Delete or View").setCancelable(false)
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int selectedItems = position;
+                                        mFirebaseAdapter.getRef(selectedItems).removeValue();
+                                        mFirebaseAdapter.notifyItemRemoved(selectedItems);
+                                        recyclerView.invalidate();
+                                        onStart();
+
+//                                        RecyclerView.ViewHolder story = recyclerView.getRecycledViewPool().getRecycledView(position);
+                                        //////////Show the story
+                                    }
+                                })
+                                .setNegativeButton("View", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         int selectedItems = position;
@@ -77,18 +90,10 @@ public class ViewAllStory extends AppCompatActivity {
                                         startActivity(intent);
                                         Log.e("Test","Position"+selectedItems);
                                         finish();
-//                                        RecyclerView.ViewHolder story = recyclerView.getRecycledViewPool().getRecycledView(position);
-                                        //////////Show the story
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
                                     }
                                 });
                         AlertDialog dialog = builder.create();
-                        dialog.setTitle("Are you sure?");
+                        dialog.setTitle("What do you do?");
                         dialog.show();
                     }
                 });

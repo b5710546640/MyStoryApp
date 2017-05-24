@@ -29,6 +29,7 @@
                 android:background="@color/cardview_shadow_end_color"
                 android:padding="5dp"
                 android:text="detail" />
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
